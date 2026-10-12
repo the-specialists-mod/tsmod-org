@@ -1,6 +1,8 @@
 import { DownloadSimpleIcon, LinuxLogoIcon, WarningIcon, WindowsLogoIcon } from '@phosphor-icons/react'
+import { useState } from 'react'
 import { CopyText } from '@/components/copy-text'
 import { PageHeader } from '@/components/layout'
+import { Lightbox } from '@/components/lightbox'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -38,6 +40,25 @@ function Code({ children }: { children: string }) {
 }
 
 const A = (props: React.ComponentProps<'a'>) => <a className="link" {...props} />
+
+function Screenshots() {
+  const [open, setOpen] = useState<number | null>(null)
+  return (
+    <>
+      <ul className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {launcherScreenshots.map((shot, i) => (
+          <li key={shot.src} className="panel flex flex-col p-2">
+            <button type="button" onClick={() => setOpen(i)} aria-label={`View larger: ${shot.caption}`} className="cursor-zoom-in">
+              <img src={shot.src} alt={shot.caption} width={1100} height={760} loading="lazy" className="w-full border border-black transition-opacity hover:opacity-80" />
+            </button>
+            <p className="mt-2 px-1 pb-1 text-xs text-foreground/85">{shot.caption}</p>
+          </li>
+        ))}
+      </ul>
+      <Lightbox images={launcherScreenshots} index={open} onIndexChange={setOpen} />
+    </>
+  )
+}
 
 export function PlayPage() {
   return (
@@ -125,16 +146,7 @@ ts-launcher play`}</Code>
                 ))}
               </ul>
               <h2 className="mt-12 text-2xl">Screenshots</h2>
-              <ul className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                {launcherScreenshots.map((shot) => (
-                  <li key={shot.src} className="panel flex flex-col p-2">
-                    <a href={shot.src} target="_blank" rel="noreferrer">
-                      <img src={shot.src} alt={shot.caption} width={1100} height={760} loading="lazy" className="w-full border border-black" />
-                    </a>
-                    <p className="mt-2 px-1 pb-1 text-xs text-foreground/85">{shot.caption}</p>
-                  </li>
-                ))}
-              </ul>
+              <Screenshots />
             </section>
           </TabsContent>
 
