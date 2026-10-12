@@ -126,9 +126,12 @@
   }
 }
 
-/* The 790px-wide grunge texture the 2007 site's content column sat on. */
+/* The 790px-wide grunge texture the 2007 site's content column sat on, shown at half
+   strength: the black layer on top lets the black page show through. */
 @utility grunge {
-  background: #434242 url('/img/2007/grunge.jpg') repeat;
+  background:
+    linear-gradient(rgb(0 0 0 / 0.5), rgb(0 0 0 / 0.5)),
+    #434242 url('/img/2007/grunge.jpg') repeat;
 }
 
 /* The brushed-metal strip from the 2007 header, stretched to any width. */
