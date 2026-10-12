@@ -5,7 +5,7 @@ import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet'
 import { Separator } from '@/components/ui/separator'
-import { ARCHIVE_ORG, DISCORD, HALF_LIFE_STEAM, MOD_ORG, OFFICIAL_SITE_WAYBACK, SITE_REPO } from '@/content/links'
+import { ARCHIVE_ORG, DISCORD, HALF_LIFE_STEAM, MOD_ORG, OFFICIAL_SITE_WAYBACK, SITE_REPO, STEAM_GROUP } from '@/content/links'
 
 const nav = [
   { to: '/play', label: 'Play' },
@@ -94,7 +94,7 @@ function Footer() {
         <div className="space-y-2">
           <p className="font-display text-sm text-foreground">Community</p>
           <ul className="space-y-1">
-            <li><a className="hover:text-foreground" href={DISCORD}>Discord</a></li>
+            <li><a className="hover:text-foreground" href={DISCORD}>Discord</a> · <a className="hover:text-foreground" href={STEAM_GROUP}>Steam group</a></li>
             <li><a className="hover:text-foreground" href={MOD_ORG}>the-specialists-mod on GitHub</a></li>
             <li><a className="hover:text-foreground" href={ARCHIVE_ORG}>The Specialists Archive</a></li>
             <li><a className="hover:text-foreground" href={OFFICIAL_SITE_WAYBACK}>specialistsmod.net (2007)</a></li>

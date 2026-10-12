@@ -2,7 +2,7 @@ import { ArrowSquareOutIcon } from '@phosphor-icons/react'
 import { PageHeader } from '@/components/layout'
 import { Badge } from '@/components/ui/badge'
 import { archiveCategories, archiveRepos } from '@/content/archive'
-import { ARCHIVE_ORG, DECOMP_REPO, DISCORD, INSTALLER_REPO, MOD_ORG, RUST_REPO } from '@/content/links'
+import { ARCHIVE_ORG, DECOMP_REPO, DISCORD, INSTALLER_REPO, MOD_ORG, RUST_REPO, STEAM_GROUP, TSMOD_NET } from '@/content/links'
 import repos from '@/data/archive-repos.json'
 
 type Resource = { name: string; href: string; desc: string; badges?: string[]; updated?: string }
@@ -11,11 +11,13 @@ const activeProjects: Resource[] = [
   { name: 'tsmod-installer', href: INSTALLER_REPO, desc: 'Cross-platform installer and launcher: server browser, model picker, controls, settings, hosting.' },
   { name: 'the-specialistsmod-rs', href: RUST_REPO, desc: 'Wire-compatible Rust port of the TS 3.0 client and server libraries.' },
   { name: 'the-specialists-decomp', href: DECOMP_REPO, desc: 'Ghidra decompilation and documentation of the TS 3.0 binaries, the reference for the port.' },
+  { name: 'tsmod.net', href: TSMOD_NET, desc: 'Community hub run by Retro LAN: a mod download, live player stats for its srv.tsmod.net server, media, and the FAQ and manual.' },
   { name: 'the-specialists-mod', href: MOD_ORG, desc: 'The GitHub organisation for all of the above, and this website.' },
 ]
 
 const community: Resource[] = [
   { name: 'Discord', href: DISCORD, desc: 'Find games, share maps, get help. Got old maps, models or files for the archive? Bring them here.' },
+  { name: 'The Specialists Forum [TSF]', href: STEAM_GROUP, desc: 'The Steam group, running since 2007. Find people to play with and add them as friends.' },
 ]
 
 function archiveGroups() {
@@ -80,7 +82,7 @@ export function ResourcesPage() {
       <div className="mx-auto max-w-6xl space-y-14 px-4">
         <section>
           <h2 className="text-2xl">Active projects</h2>
-          <p className="mt-1 text-xs text-muted-foreground">Where TS development happens now.</p>
+          <p className="mt-1 text-xs text-muted-foreground">Where TS is developed and played today.</p>
           <ResourceGrid items={activeProjects} />
         </section>
 

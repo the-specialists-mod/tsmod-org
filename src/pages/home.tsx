@@ -16,8 +16,9 @@ import {
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
-import { INSTALLER_DOWNLOADS, INSTALLER_REPO, INSTALLER_VERSION, RUST_RELEASES, RUST_REPO } from '@/content/links'
+import { INSTALLER_DOWNLOADS, INSTALLER_RELEASES, RUST_RELEASES, RUST_REPO } from '@/content/links'
 import { officialMaps } from '@/content/official-maps'
+import { weapons } from '@/content/weapons'
 
 const heroShots = ['1', '2', '3', '4', '5'].map((n) => `/img/shots/${n}.webp`)
 
@@ -37,7 +38,7 @@ const features = [
   { icon: PersonSimpleRunIcon, title: 'Stunts', body: 'Dive, roll, cartwheel, run up walls and flip off them. Lighter loadouts flip higher.' },
   { icon: HourglassIcon, title: 'Slow motion', body: 'Bullet time as a power-up or earned per frag. Watch the rounds drift past.' },
   { icon: HandFistIcon, title: 'Kung fu', body: 'Out of ammo? Kick the gun out of their hand. Blocks, combos and flying kicks.' },
-  { icon: TargetIcon, title: '37 weapons', body: 'Akimbo pistols, shotguns, SMGs, rifles, katanas you can throw, and grenades.' },
+  { icon: TargetIcon, title: `${weapons.length} weapons`, body: 'Akimbo pistols, shotguns, SMGs, rifles, a sniper rifle, and knives and katanas you can throw.' },
   { icon: UsersThreeIcon, title: 'Game modes', body: 'Deathmatch, team play, Last Man Standing, The One and Capture The Briefcase.' },
   { icon: SwordIcon, title: 'Endless content', body: 'Hundreds of community maps and nearly two thousand player models, all archived.' },
 ]
@@ -158,7 +159,7 @@ export function HomePage() {
                 </a>
               </Button>
               <Button variant="link" asChild>
-                <a href={INSTALLER_REPO}>{INSTALLER_VERSION} on GitHub</a>
+                <a href={INSTALLER_RELEASES}>Latest release on GitHub</a>
               </Button>
             </CardFooter>
           </Card>
@@ -212,7 +213,7 @@ export function HomePage() {
           {[
             { n: counts?.maps, label: 'maps indexed', to: '/maps' },
             { n: counts?.models, label: 'player models archived', to: '/models' },
-            { n: 37, label: 'weapons in 3.0', to: '/manual' },
+            { n: weapons.length, label: 'weapons in 3.0', to: '/manual?tab=weapons' },
           ].map((s) => (
             <Link key={s.label} to={s.to} className="group bg-background/90 p-8 transition-colors hover:bg-accent/40">
               <div className="font-display text-5xl text-foreground">{s.n?.toLocaleString() ?? '…'}</div>

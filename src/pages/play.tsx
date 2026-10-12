@@ -10,7 +10,6 @@ import {
   HALF_LIFE_STEAM,
   INSTALLER_DOWNLOADS,
   INSTALLER_REPO,
-  INSTALLER_VERSION,
   RUST_INSTALL_DOCS,
   RUST_RELEASES,
   RUST_REPO,
@@ -18,6 +17,7 @@ import {
   TS_INSTALLER_MD5,
   TS_INTERNET_ARCHIVE,
   TS_MODDB,
+  TS_RELEASE,
   XASH_FWGS,
   XASH_TS_REPO,
 } from '@/content/links'
@@ -98,7 +98,7 @@ export function PlayPage() {
             </ol>
             <Card size="sm" className="h-fit">
               <CardHeader>
-                <CardTitle className="font-display">ts-launcher {INSTALLER_VERSION}</CardTitle>
+                <CardTitle className="font-display">ts-launcher</CardTitle>
                 <CardDescription>Built with GPUI. Windows and Linux.</CardDescription>
               </CardHeader>
               <CardContent className="space-y-3 text-xs text-muted-foreground">
@@ -123,8 +123,11 @@ ts-launcher play`}</Code>
                 <div className="flex flex-wrap gap-2 pt-1">
                   <Button asChild>
                     <a href={TS_INSTALLER_EXE}>
-                      <DownloadSimpleIcon data-icon="inline-start" /> ts-3-final.exe
+                      <DownloadSimpleIcon data-icon="inline-start" /> ts-3-final.exe (155 MB)
                     </a>
+                  </Button>
+                  <Button variant="outline" asChild>
+                    <a href={TS_RELEASE}>Release page</a>
                   </Button>
                   <Button variant="outline" asChild>
                     <a href={TS_INTERNET_ARCHIVE}>Internet Archive</a>
