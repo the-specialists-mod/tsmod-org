@@ -39,7 +39,7 @@ export function ModelsPage() {
         else p.delete(key)
         return p
       },
-      { replace: true },
+      { replace: true, preventScrollReset: true },
     )
   }
 

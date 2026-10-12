@@ -266,7 +266,7 @@ export function LoadoutBuilder() {
         else p.delete('l')
         return p
       },
-      { replace: true },
+      { replace: true, preventScrollReset: true },
     )
 
   const entries = loadout.entries.map((e) => ({ e, w: weaponById.get(e.id)! }))

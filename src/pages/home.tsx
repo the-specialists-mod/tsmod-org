@@ -16,23 +16,36 @@ import {
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
-import { INSTALLER_DOWNLOADS, INSTALLER_RELEASES, RUST_RELEASES, RUST_REPO } from '@/content/links'
+import { INSTALLER_DOWNLOADS, INSTALLER_RELEASES, OFFICIAL_SITE_WAYBACK, RUST_RELEASES, RUST_REPO } from '@/content/links'
 import { officialMaps } from '@/content/official-maps'
 import { weapons } from '@/content/weapons'
 
-const heroShots = ['1', '2', '3', '4', '5'].map((n) => `/img/shots/${n}.webp`)
+// TS 3.0 screenshots from the mod's ModDB gallery (media.moddb.com/images/mods/1/1/144/).
+const heroShots = ['22765', '22767', '22763'].map((n) => `/img/moddb/${n}.jpg`)
 
-const fiskCity = [
-  '20241130000908_1',
-  '20241130173731_1',
-  '20241130173233_1',
-  '20241130041554_1',
-  '20241130170716_1',
-  '20241130204538_1',
-  '20241130204424_1',
-  '20241130170934_1',
-  '20241130204605_1',
-].map((n) => `/img/shots/${n}.webp`)
+// The six screenshots from Schmung's "Media Ahoy!" news post on specialistsmod.net
+// (Apr 24, 2007), with his captions. Only the post's 320x240 thumbnails survive in the
+// archive; the full-size images were never captured.
+const mediaAhoy = [
+  { n: 1, map: 'ts_hammertime', caption: 'First up, a shot of newly redecorated Hammertime.' },
+  {
+    n: 2,
+    map: 'ts_hammertime',
+    caption: 'This time castor is delivering a rather painful kick that appears to have gotten the better of hitman.',
+  },
+  {
+    n: 3,
+    map: 'ts_gpc',
+    caption: 'Now to that old favourite GPC, where, despite aiming at a pipe, one of our RC testers has managed to kill someone with a shotgun. Good for him.',
+  },
+  { n: 4, map: 'ts_antrodome', caption: 'Antro next, for a spot of Skorpion rage. … this fellow is using free full and is spitting bullets from both guns at once.' },
+  {
+    n: 5,
+    map: 'ts_neobaroque',
+    caption: "To NeoBaroque next, another map that's had a facelift. Though … at no point … have I ever felt the need to add a thunderstorm to my house.",
+  },
+  { n: 6, map: 'ts_neobaroque', caption: 'One of our RC testers apparently hates windows, as you can see from the glass cascading down upon him.' },
+]
 
 const features = [
   { icon: PersonSimpleRunIcon, title: 'Stunts', body: 'Dive, roll, cartwheel, run up walls and flip off them. Lighter loadouts flip higher.' },
@@ -192,22 +205,33 @@ export function HomePage() {
       </section>
 
       <section className="mx-auto max-w-6xl px-4 py-16">
-        <div className="flex flex-wrap items-end justify-between gap-4">
-          <div>
-            <p className="text-xs uppercase tracking-[0.3em] text-primary">Community</p>
-            <h2 className="mt-2 text-3xl">Fisk City Xmas 2024</h2>
-            <p className="mt-2 max-w-2xl text-sm text-muted-foreground">
-              The Fisk City roleplay community's 10-day Christmas event, one of the best yet. TS roleplay lives on in maps, models and plugins kept in the archive.
-            </p>
-          </div>
-        </div>
-        <div className="mt-8 grid grid-cols-2 gap-1 md:grid-cols-4">
-          {fiskCity.map((src, i) => (
-            <a key={src} href={src} className={`group relative overflow-hidden ${i === 0 ? 'col-span-2 row-span-2' : ''}`}>
-              <img src={src} alt="Fisk City screenshot" loading="lazy" className="aspect-video size-full object-cover transition duration-500 group-hover:scale-105" />
-            </a>
+        <p className="text-xs uppercase tracking-[0.3em] text-primary">From the archive</p>
+        <h2 className="mt-2 text-3xl">Media Ahoy!</h2>
+        <p className="mt-2 max-w-2xl text-sm text-muted-foreground">
+          Schmung on specialistsmod.net, April 24, 2007, as the 3.0 release candidates went out: "As promised, some more media."{' '}
+          <a href={OFFICIAL_SITE_WAYBACK} className="link">
+            Read the original
+          </a>
+          .
+        </p>
+        <ul className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {mediaAhoy.map((m) => (
+            <li key={m.n} className="panel flex flex-col p-2">
+              <img
+                src={`/img/2007/media-ahoy/upd_24_${m.n}.jpg`}
+                alt={`${m.map} in a TS 3.0 release candidate, 2007`}
+                width={320}
+                height={240}
+                loading="lazy"
+                className="aspect-[4/3] w-full border border-black object-cover"
+              />
+              <p className="mt-2 px-1 text-xs leading-relaxed text-foreground/85 italic">"{m.caption}"</p>
+              <Link to={`/maps?q=${m.map}`} className="link mt-auto self-start px-1 pt-2 pb-1 text-[11px] not-italic">
+                {m.map}
+              </Link>
+            </li>
           ))}
-        </div>
+        </ul>
       </section>
 
       <section className="mx-auto max-w-6xl px-4 py-16">

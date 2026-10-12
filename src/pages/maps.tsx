@@ -46,7 +46,7 @@ export function MapsPage() {
         else p.delete(key)
         return p
       },
-      { replace: true },
+      { replace: true, preventScrollReset: true },
     )
 
   const official = officialMaps.filter((m) => matches(q, m.name, m.title, m.author))

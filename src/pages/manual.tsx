@@ -190,7 +190,7 @@ export function ManualPage() {
         else p.set('tab', v)
         return p
       },
-      { replace: true },
+      { replace: true, preventScrollReset: true },
     )
 
   return (
