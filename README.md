@@ -62,5 +62,9 @@ scripts/          data generators
   `src/data/custom-maps.json`. Dependencies come from each map's `.res` file and from the BSP
   itself (entities, skybox, and the WADs that provide its external textures); files that ship with
   stock TS 3.0 or Half-Life are left out. Edit the paths in `package.json` to point at your install.
+- `python3 -I scripts/gen-weapons.py <the-specialistsmod-rs>/crates/shared/data/weapons.toml` regenerates
+  `src/content/weapons.ts` (the Manual's weapon table and loadout builder) from the Rust port's decoded
+  TS 3.0 weapon table. Kung fu moves (`src/content/kungfu.ts`) and loadout rules (`src/lib/loadout.ts`)
+  are hand-written from the same port's source.
 
 Anyone can contribute with a pull request.

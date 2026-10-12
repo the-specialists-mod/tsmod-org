@@ -8,7 +8,11 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { RUST_REPO } from '@/content/links'
 import { controls, damageRules, faq, gameModes, loadout, powerUpNotes, powerUps, scoring, serverCvars, sprees, votes } from '@/content/manual'
-import { attachmentPrices, weapons, type Weapon } from '@/content/weapons'
+import { attachmentPrices, weaponById, weapons, type Attachment, type FireMode, type Weapon } from '@/content/weapons'
+import { AttachmentIcon, AttachmentIcons, attachmentLabels, FireModeIcon, fireModeLabels, WeaponIcons } from '@/components/weapon-icons'
+import { slotsOf } from '@/lib/loadout'
+import { LoadoutBuilder } from '@/components/loadout-builder'
+import { blades, blockRules, kicks, meleeRules, punches, type Move } from '@/content/kungfu'
 import { cn } from '@/lib/utils'
 
 const kinds: Weapon['kind'][] = ['Pistol', 'Akimbo', 'SMG', 'Rifle', 'Shotgun', 'Sniper', 'Blade', 'Grenade']
@@ -37,6 +41,80 @@ function Section({ title, children, note }: { title: string; note?: React.ReactN
   )
 }
 
+function MoveTable({ moves }: { moves: Move[] }) {
+  return (
+    <Table>
+      <TableHeader>
+        <TableRow>
+          <TableHead>Move</TableHead>
+          <TableHead>Input</TableHead>
+          <TableHead className="hidden md:table-cell">When</TableHead>
+          <TableHead className="text-right">Damage</TableHead>
+          <TableHead className="hidden text-right sm:table-cell">Recovery (s)</TableHead>
+          <TableHead className="hidden text-right lg:table-cell">Reach</TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        {moves.map((m) => (
+          <TableRow key={m.name}>
+            <TableCell className="align-top">
+              <span className="font-bold text-foreground">{m.name}</span>
+              {m.note && <span className="mt-0.5 block max-w-xs text-[11px] whitespace-normal text-muted-foreground">{m.note}</span>}
+            </TableCell>
+            <TableCell className="align-top">
+              <kbd className="inline-block border border-b-2 border-black bg-muted px-1.5 py-0.5 text-[11px] whitespace-normal text-foreground">{m.input}</kbd>
+              <span className="mt-1 block text-[11px] whitespace-normal text-muted-foreground md:hidden">{m.when}</span>
+            </TableCell>
+            <TableCell className="hidden align-top whitespace-normal text-muted-foreground md:table-cell">{m.when}</TableCell>
+            <TableCell className="text-right align-top text-foreground">{m.damage}</TableCell>
+            <TableCell className="hidden text-right align-top text-muted-foreground sm:table-cell">{m.recovery}</TableCell>
+            <TableCell className="hidden text-right align-top text-muted-foreground lg:table-cell">{m.reach}</TableCell>
+          </TableRow>
+        ))}
+      </TableBody>
+    </Table>
+  )
+}
+
+function IconLegend() {
+  return (
+    <div className="panel mt-4 grid gap-4 p-4 text-xs sm:grid-cols-2">
+      <div>
+        <p className="mb-2 font-bold text-foreground">
+          Fire modes <span className="font-normal text-muted-foreground">(F switches)</span>
+        </p>
+        <ul className="space-y-1.5">
+          {(Object.keys(fireModeLabels) as FireMode[]).map((m) => (
+            <li key={m} className="flex items-center gap-2 text-muted-foreground">
+              <FireModeIcon mode={m} className="size-4 shrink-0 text-foreground" />
+              <span>
+                <span className="text-foreground">{fireModeLabels[m].name}</span>: {fireModeLabels[m].desc}
+              </span>
+            </li>
+          ))}
+        </ul>
+      </div>
+      <div>
+        <p className="mb-2 font-bold text-foreground">Attachments</p>
+        <ul className="space-y-1.5">
+          {(Object.keys(attachmentLabels) as Attachment[]).map((a) => (
+            <li key={a} className="flex items-center gap-2 text-muted-foreground">
+              <AttachmentIcon attachment={a} className="size-4 shrink-0 text-link" />
+              <span>
+                <span className="text-foreground">{attachmentLabels[a].name}</span> (${attachmentPrices[a]}): {attachmentLabels[a].desc}
+              </span>
+            </li>
+          ))}
+          <li className="flex items-center gap-2 text-muted-foreground">
+            <AttachmentIcon attachment="scope" className="size-4 shrink-0 text-link-hover" />
+            <span>Yellow: built into the gun.</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  )
+}
+
 function WeaponTable() {
   const [kind, setKind] = useState<Weapon['kind'] | 'All'>('All')
   const list = kind === 'All' ? weapons : weapons.filter((w) => w.kind === kind)
@@ -48,7 +126,7 @@ function WeaponTable() {
             key={k}
             type="button"
             onClick={() => setKind(k)}
-            className={cn('border px-2.5 py-1 text-xs transition-colors', kind === k ? 'border-primary bg-primary text-primary-foreground' : 'text-muted-foreground hover:text-foreground')}
+            className={cn('border px-2.5 py-1 text-xs transition-colors', kind === k ? 'border-primary bg-primary text-primary-foreground' : 'border-black bg-black/30 text-muted-foreground hover:text-foreground')}
           >
             {k}
           </button>
@@ -66,40 +144,37 @@ function WeaponTable() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {list.map((w) => (
-            <TableRow key={w.name}>
-              <TableCell>
-                <span className="text-foreground">{w.name}</span>
-                <span className="ml-2 text-[10px] text-muted-foreground">{w.kind}</span>
-                {w.akimbo && (
-                  <Badge variant="outline" className="ml-2 text-[10px]">
-                    akimbo pair
-                  </Badge>
-                )}
-              </TableCell>
-              <TableCell className="text-right text-foreground">{w.slots}</TableCell>
-              <TableCell className="text-right whitespace-nowrap">
-                {w.damage}
-                {w.pellets && <span className="text-muted-foreground"> ×{w.pellets}</span>}
-              </TableCell>
-              <TableCell className="hidden text-right text-muted-foreground sm:table-cell">{w.clip ?? '—'}</TableCell>
-              <TableCell className="hidden text-xs text-muted-foreground md:table-cell">{w.modes.join(', ') || '—'}</TableCell>
-              <TableCell className="hidden text-xs text-muted-foreground lg:table-cell">
-                {w.builtIn.map((a) => (
-                  <span key={a} className="text-foreground">
-                    {a} (built in){w.attachments.length ? ', ' : ''}
-                  </span>
-                ))}
-                {w.attachments.join(', ') || (w.builtIn.length ? '' : '—')}
-              </TableCell>
-            </TableRow>
-          ))}
+          {list.map((w) => {
+            const single = w.singleId != null ? weaponById.get(w.singleId) : undefined
+            return (
+              <TableRow key={w.id}>
+                <TableCell>
+                  <span className="text-foreground">{w.name}</span>
+                  <span className="ml-2 text-[10px] text-muted-foreground">{single ? `2× ${single.name}` : w.kind}</span>
+                  {w.pairId != null && (
+                    <Badge variant="outline" className="ml-2 text-[10px]">
+                      akimbo pair
+                    </Badge>
+                  )}
+                </TableCell>
+                <TableCell className="text-right text-foreground">{slotsOf(w)}</TableCell>
+                <TableCell className="text-right whitespace-nowrap">
+                  {w.damage}
+                  {w.pellets && <span className="text-muted-foreground"> ×{w.pellets}</span>}
+                </TableCell>
+                <TableCell className="hidden text-right text-muted-foreground sm:table-cell">{w.clip ?? '—'}</TableCell>
+                <TableCell className="hidden md:table-cell">{w.modes.length ? <WeaponIcons w={w} /> : <span className="text-muted-foreground">—</span>}</TableCell>
+                <TableCell className="hidden lg:table-cell">
+                  {w.attachments.length + w.builtIn.length ? <AttachmentIcons w={w} /> : <span className="text-muted-foreground">—</span>}
+                </TableCell>
+              </TableRow>
+            )
+          })}
         </TableBody>
       </Table>
+      <IconLegend />
       <p className="mt-3 text-xs text-muted-foreground">
-        Damage is per bullet before hit-location multipliers; shotguns fire ×pellets. Attachment prices: silencer ${attachmentPrices.silencer}, laser $
-        {attachmentPrices.laser}, flashlight ${attachmentPrices.flashlight}, scope ${attachmentPrices.scope}; Kevlar $1,900. Kung fu is always available and takes no
-        slots.
+        Damage is per bullet before hit-location multipliers; shotguns fire ×pellets. Kevlar costs $1,900 and 10 slots. Kung fu is always available and takes no slots.
       </p>
     </>
   )
@@ -133,6 +208,8 @@ export function ManualPage() {
           <TabsList className="mb-8 h-auto! flex-wrap">
             <TabsTrigger value="basics">Basics</TabsTrigger>
             <TabsTrigger value="weapons">Weapons</TabsTrigger>
+            <TabsTrigger value="loadout">Loadout builder</TabsTrigger>
+            <TabsTrigger value="kungfu">Kung fu</TabsTrigger>
             <TabsTrigger value="powerups">Power-ups &amp; scoring</TabsTrigger>
             <TabsTrigger value="modes">Modes &amp; servers</TabsTrigger>
           </TabsList>
@@ -171,6 +248,36 @@ export function ManualPage() {
             </Section>
             <Section title="Damage">
               <StatTiles items={damageRules} />
+            </Section>
+          </TabsContent>
+
+          <TabsContent value="loadout">
+            <Section
+              title="Loadout builder"
+              note="Pick weapons, attachments and armour within your 81 slots and see what you can do with them. The link updates as you go, so you can share a build."
+            >
+              <LoadoutBuilder />
+            </Section>
+          </TabsContent>
+
+          <TabsContent value="kungfu" className="space-y-12">
+            <Section
+              title="Punches"
+              note="Kung fu is always in your hands (slot 0, no slots used). Punches are on Fire; holding or tapping, ducking and being airborne pick the move."
+            >
+              <MoveTable moves={punches} />
+            </Section>
+            <Section title="Kicks" note="Kicks are on Mouse2. Moving backwards, ducking, jumping and your speed pick the move; the fast ones hit harder the faster you go.">
+              <MoveTable moves={kicks} />
+            </Section>
+            <Section title="Blocking" note="Time it: a block only lasts half a second.">
+              <StatTiles items={blockRules} />
+            </Section>
+            <Section title="How hits work">
+              <StatTiles items={meleeRules} />
+            </Section>
+            <Section title="Blades and gun butts" note="Knives and the katana also block with R. Thrown blades can be picked up again.">
+              <MoveTable moves={blades} />
             </Section>
           </TabsContent>
 
