@@ -6,6 +6,7 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { launcherFeatures, launcherScreenshots } from '@/content/launcher'
 import {
   HALF_LIFE_STEAM,
   INSTALLER_RELEASES,
@@ -112,6 +113,29 @@ ts-launcher play`}</Code>
                 </Button>
               </CardContent>
             </Card>
+            <section className="lg:col-span-2">
+              <p className="text-xs uppercase tracking-[0.3em] text-primary">What it does</p>
+              <h2 className="mt-2 text-2xl">Launcher features</h2>
+              <ul className="mt-6 grid gap-x-8 gap-y-4 text-sm sm:grid-cols-2 lg:grid-cols-3">
+                {launcherFeatures.map((f) => (
+                  <li key={f.title}>
+                    <h3 className="text-foreground">{f.title}</h3>
+                    <p className="mt-1 leading-relaxed text-muted-foreground">{f.text}</p>
+                  </li>
+                ))}
+              </ul>
+              <h2 className="mt-12 text-2xl">Screenshots</h2>
+              <ul className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                {launcherScreenshots.map((shot) => (
+                  <li key={shot.src} className="panel flex flex-col p-2">
+                    <a href={shot.src} target="_blank" rel="noreferrer">
+                      <img src={shot.src} alt={shot.caption} width={1100} height={760} loading="lazy" className="w-full border border-black" />
+                    </a>
+                    <p className="mt-2 px-1 pb-1 text-xs text-foreground/85">{shot.caption}</p>
+                  </li>
+                ))}
+              </ul>
+            </section>
           </TabsContent>
 
           <TabsContent value="steam" className="max-w-3xl">

@@ -147,6 +147,9 @@ export function HomePage() {
         <h2 className="mt-2 text-3xl">TS today</h2>
         <div className="mt-8 grid gap-6 lg:grid-cols-2">
           <Card>
+            <Link to="/play">
+              <img src="/img/launcher/servers.webp" alt="The launcher's server browser" className="aspect-video w-full object-cover object-top" loading="lazy" />
+            </Link>
             <CardHeader>
               <CardTitle className="font-bold text-xl">TS Installer &amp; Launcher</CardTitle>
               <CardDescription>
@@ -156,10 +159,13 @@ export function HomePage() {
             </CardHeader>
             <CardContent>
               <ul className="space-y-1.5 text-xs text-muted-foreground">
-                <li>▸ Server browser with community servers, LAN and favorites</li>
+                <li>▸ Server browser with Steam, community, LAN and favorite servers</li>
+                <li>▸ Joins Steam servers from Xash3D FWGS too</li>
+                <li>▸ Original DLLs or the Rust port, switchable any time</li>
                 <li>▸ Player model picker with a 3D preview</li>
                 <li>▸ Key binding and game settings editors</li>
                 <li>▸ Host a listen or dedicated server with bots</li>
+                <li>▸ Validates and repairs your install, and updates itself</li>
               </ul>
             </CardContent>
             <CardFooter className="flex flex-wrap gap-2">
@@ -172,6 +178,9 @@ export function HomePage() {
                 <a href={INSTALLER_RELEASES}>
                   <LinuxLogoIcon data-icon="inline-start" /> Linux
                 </a>
+              </Button>
+              <Button variant="link" asChild>
+                <Link to="/play">Features &amp; screenshots</Link>
               </Button>
               <Button variant="link" asChild>
                 <a href={INSTALLER_REPO}>Source on GitHub</a>
