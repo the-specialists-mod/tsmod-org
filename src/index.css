@@ -2,20 +2,19 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 @import "@fontsource-variable/jetbrains-mono";
+@import "@fontsource/anton";
 
 @custom-variant dark (&:is(.dark *));
 
-/* CP Mono, the typeface of the original tsmod.org. */
-@font-face {
-    font-family: 'CPMono';
-    src: url('/fonts/CPMono_v07Plain.woff2') format('woff2');
-    font-display: swap;
-}
 
 @theme inline {
-    --font-heading: 'CPMono', var(--font-mono);
-    --font-display: 'CPMono', var(--font-mono);
+    /* specialistsmod.net (2007): Verdana text, Impact-style stencil lettering on metal. */
+    --font-sans: Verdana, Geneva, Tahoma, sans-serif;
+    --font-heading: 'Anton', Impact, 'Arial Narrow', sans-serif;
+    --font-display: 'Anton', Impact, 'Arial Narrow', sans-serif;
     --font-mono: 'JetBrains Mono Variable', monospace;
+    --color-link: var(--link);
+    --color-link-hover: var(--link-hover);
     --color-sidebar-ring: var(--sidebar-ring);
     --color-sidebar-border: var(--sidebar-border);
     --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -56,43 +55,46 @@
     --radius-4xl: calc(var(--radius) * 2.6);
 }
 
-/* Dark-only theme: gritty concrete greys with a blood-red accent, after the
-   TS logo. Both :root and .dark carry it so components look the same either way. */
+/* After specialistsmod.net (2007): a black page, a grunge-textured column, #333 panels
+   with black borders, grey-lavender links that turn yellow on hover, and the TS logo's
+   blood red for actions. Both :root and .dark carry it so components look the same. */
 :root,
 .dark {
     color-scheme: dark;
-    --background: oklch(0.13 0.004 30);
-    --foreground: oklch(0.93 0.005 60);
-    --card: oklch(0.17 0.005 30 / 85%);
-    --card-foreground: oklch(0.93 0.005 60);
-    --popover: oklch(0.17 0.005 30);
-    --popover-foreground: oklch(0.93 0.005 60);
-    --primary: oklch(0.55 0.2 27);
-    --primary-foreground: oklch(0.98 0 0);
-    --secondary: oklch(0.24 0.006 30);
-    --secondary-foreground: oklch(0.93 0.005 60);
-    --muted: oklch(0.22 0.006 30);
-    --muted-foreground: oklch(0.7 0.01 50);
-    --accent: oklch(0.26 0.03 27);
-    --accent-foreground: oklch(0.96 0 0);
-    --destructive: oklch(0.65 0.21 25);
-    --border: oklch(1 0 0 / 11%);
-    --input: oklch(1 0 0 / 15%);
-    --ring: oklch(0.55 0.2 27);
-    --chart-1: oklch(0.55 0.2 27);
-    --chart-2: oklch(0.7 0.01 50);
-    --chart-3: oklch(0.5 0.01 50);
-    --chart-4: oklch(0.4 0.01 50);
-    --chart-5: oklch(0.3 0.01 50);
+    --background: #333333;
+    --foreground: #ececec;
+    --card: #333333;
+    --card-foreground: #ececec;
+    --popover: #2b2b2b;
+    --popover-foreground: #ececec;
+    --primary: #a51d1d;
+    --primary-foreground: #ffffff;
+    --secondary: #4a4a4a;
+    --secondary-foreground: #ececec;
+    --muted: #2a2a2a;
+    --muted-foreground: #b4b4b4;
+    --accent: #454545;
+    --accent-foreground: #ffffff;
+    --destructive: #e05a4f;
+    --border: #000000;
+    --input: #5a5a5a;
+    --ring: #edff6f;
+    --link: #b5bac8;
+    --link-hover: #edff6f;
+    --chart-1: #a51d1d;
+    --chart-2: #b5bac8;
+    --chart-3: #8a8a8a;
+    --chart-4: #666666;
+    --chart-5: #444444;
     --radius: 0rem;
-    --sidebar: oklch(0.17 0.005 30);
-    --sidebar-foreground: oklch(0.93 0.005 60);
-    --sidebar-primary: oklch(0.55 0.2 27);
-    --sidebar-primary-foreground: oklch(0.98 0 0);
-    --sidebar-accent: oklch(0.24 0.006 30);
-    --sidebar-accent-foreground: oklch(0.93 0.005 60);
-    --sidebar-border: oklch(1 0 0 / 11%);
-    --sidebar-ring: oklch(0.55 0.2 27);
+    --sidebar: #2b2b2b;
+    --sidebar-foreground: #ececec;
+    --sidebar-primary: #a51d1d;
+    --sidebar-primary-foreground: #ffffff;
+    --sidebar-accent: #454545;
+    --sidebar-accent-foreground: #ffffff;
+    --sidebar-border: #000000;
+    --sidebar-ring: #edff6f;
 }
 
 @layer base {
@@ -106,30 +108,65 @@
     cursor: pointer;
     }
   html {
-    @apply font-mono;
+    @apply font-sans;
     }
 }
 
 @layer base {
   body {
-    background-image:
-      linear-gradient(to bottom, oklch(0.13 0.004 30 / 70%), oklch(0.13 0.004 30 / 96%) 60vh),
-      url('/img/bg.webp');
-    background-size: cover;
-    background-position: center top;
-    background-attachment: fixed;
+    background-color: #000;
     min-height: 100vh;
   }
   h1, h2, h3 {
-    @apply font-display tracking-tight;
+    @apply font-display font-normal uppercase tracking-wide;
+    text-shadow: 0 2px 0 #000;
   }
   ::selection {
     @apply bg-primary text-primary-foreground;
   }
 }
 
-/* Faint scanline overlay for hero imagery. */
-@utility scanlines {
-  background-image: repeating-linear-gradient(to bottom, transparent 0 2px, oklch(0 0 0 / 18%) 2px 3px);
+/* The 790px-wide grunge texture the 2007 site's content column sat on. */
+@utility grunge {
+  background: #434242 url('/img/2007/grunge.jpg') repeat;
 }
 
+/* The brushed-metal strip from the 2007 header, stretched to any width. */
+@utility metal-bar {
+  background: #5d6061 url('/img/2007/metal-bar.jpg') center / 100% 100% no-repeat;
+}
+
+/* Stencil lettering like the 2007 nav buttons: dark on metal, white when lit. */
+@utility stencil {
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #161616;
+  text-shadow: 0 1px 0 rgb(255 255 255 / 0.35), 0 -1px 0 rgb(0 0 0 / 0.5);
+}
+@utility stencil-lit {
+  color: #f4f4f4;
+  text-shadow: 0 0 2px #000, 1px 1px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000;
+}
+
+/* A news-post panel: #333 inside a black frame with a faint inner edge. */
+@utility panel {
+  background-color: #333333;
+  border: 1px solid #000;
+  box-shadow: inset 0 0 0 1px #474747;
+}
+
+/* Links as on the old site. */
+@utility link {
+  color: var(--link);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  &:hover {
+    color: var(--link-hover);
+  }
+}
+
+/* Faint scanline overlay for hero imagery. */
+@utility scanlines {
+  background-image: repeating-linear-gradient(to bottom, transparent 0 2px, rgb(0 0 0 / 18%) 2px 3px);
+}

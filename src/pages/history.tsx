@@ -10,11 +10,11 @@ export function HistoryPage() {
     <>
       <PageHeader title="History" kicker="Since 2002">
         From two Italian modders to a community that refuses to let it die. Much of this page comes from the{' '}
-        <a href={OFFICIAL_SITE_WAYBACK} className="text-foreground underline underline-offset-4">
+        <a href={OFFICIAL_SITE_WAYBACK} className="link">
           original specialistsmod.net
         </a>
         , preserved in the{' '}
-        <a href={OLD_SITE_REPO} className="text-foreground underline underline-offset-4">
+        <a href={OLD_SITE_REPO} className="link">
           archive
         </a>
         .
@@ -72,33 +72,33 @@ export function HistoryPage() {
             <h2 className="text-2xl">TSRP: roleplay</h2>
             <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
               For years TS roleplay drew more players than deathmatch. Condensed from the{' '}
-              <a href={TSRP_HISTORY} className="underline underline-offset-4 hover:text-foreground">
+              <a href={TSRP_HISTORY} className="link">
                 TSRP wiki
               </a>{' '}
               (2017), which notes that much of the history is still unrecorded.
             </p>
             <p className="mt-4 text-xs text-muted-foreground">
               Play the maps:{' '}
-              <Link to="/maps?tab=archive&q=westminster" className="text-foreground underline underline-offset-4 hover:text-primary">
+              <Link to="/maps?tab=archive&q=westminster" className="link">
                 tsrp_westminster
               </Link>
               ,{' '}
-              <Link to="/maps?tab=archive&q=mecklenburg" className="text-foreground underline underline-offset-4 hover:text-primary">
+              <Link to="/maps?tab=archive&q=mecklenburg" className="link">
                 Mecklenburg
               </Link>
               ,{' '}
-              <Link to="/maps?tab=archive&q=tsrp" className="text-foreground underline underline-offset-4 hover:text-primary">
+              <Link to="/maps?tab=archive&q=tsrp" className="link">
                 all tsrp_ maps
               </Link>
               .
             </p>
             <p className="mt-2 text-xs text-muted-foreground">
               Run a server: the archive keeps the{' '}
-              <a href={TS_PLUGINS_REPO} className="text-foreground underline underline-offset-4 hover:text-primary">
+              <a href={TS_PLUGINS_REPO} className="link">
                 Apollo RP plugin sources
               </a>{' '}
               and{' '}
-              <a href={HARBURP_REPO} className="text-foreground underline underline-offset-4 hover:text-primary">
+              <a href={HARBURP_REPO} className="link">
                 HarbuRP v2
               </a>
               .
@@ -124,7 +124,7 @@ export function HistoryPage() {
             {news.map((n) => (
               <Card key={n.title}>
                 <CardHeader>
-                  <CardTitle className="font-display text-lg">{n.title}</CardTitle>
+                  <CardTitle className="font-bold text-lg">{n.title}</CardTitle>
                   <CardDescription>
                     {n.author} · {n.date}
                   </CardDescription>

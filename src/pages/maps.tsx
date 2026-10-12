@@ -57,7 +57,7 @@ export function MapsPage() {
     <>
       <PageHeader title="Maps" kicker="Where the action happens">
         The 29 maps that ship with TS 3.0, community maps packaged with everything they need, and the community archive of{' '}
-        <a href={MAP_RESOURCES_REPO} className="text-foreground underline underline-offset-4">
+        <a href={MAP_RESOURCES_REPO} className="link">
           map-resources
         </a>
         . Custom maps go in <code className="text-foreground">ts/maps</code>; the zips below are laid out to extract straight into your <code className="text-foreground">ts</code>{' '}
@@ -184,7 +184,7 @@ export function MapsPage() {
             </Table>
             <p className="mt-4 text-xs text-muted-foreground">
               Downloads are the BSP only. Textures (WADs), skies, models and sounds live alongside them in{' '}
-              <a href={MAP_RESOURCES_REPO} className="underline underline-offset-4 hover:text-foreground">
+              <a href={MAP_RESOURCES_REPO} className="link">
                 map-resources
               </a>
               ; a map's <code>.res</code> file lists what it needs.

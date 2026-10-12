@@ -73,7 +73,7 @@ export function ResourcesPage() {
     <>
       <PageHeader title="Resources" kicker="Build, mod, preserve">
         Everything you need to make maps, models and plugins for TS, or to dig into how it works. Most of it lives in{' '}
-        <a href={ARCHIVE_ORG} className="text-foreground underline underline-offset-4">
+        <a href={ARCHIVE_ORG} className="link">
           The Specialists Archive
         </a>
         , a community effort to save every file, tool and web page the mod has left behind. Repos marked <em>mirror</em> are copies of upstream tools, kept so they

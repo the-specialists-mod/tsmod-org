@@ -122,7 +122,7 @@ export function ManualPage() {
     <>
       <PageHeader title="Manual" kicker="How to be a Specialist">
         Controls, weapons, power-ups and rules. The numbers come from TS 3.0's own code, as decoded for the{' '}
-        <a href={RUST_REPO} className="text-foreground underline underline-offset-4">
+        <a href={RUST_REPO} className="link">
           Rust port
         </a>
         . All keys can be rebound in-game under Options, or in the launcher's Controls tab.
@@ -180,7 +180,7 @@ export function ManualPage() {
                 {powerUps.map((p) => (
                   <Card key={p.name} size="sm">
                     <CardHeader>
-                      <CardTitle className="font-display">{p.name}</CardTitle>
+                      <CardTitle className="font-bold">{p.name}</CardTitle>
                       <CardDescription>{p.desc}</CardDescription>
                     </CardHeader>
                   </Card>
@@ -224,7 +224,7 @@ export function ManualPage() {
                 {gameModes.map((m) => (
                   <Card key={m.name} size="sm">
                     <CardHeader>
-                      <CardTitle className="font-display">{m.name}</CardTitle>
+                      <CardTitle className="font-bold">{m.name}</CardTitle>
                       <CardDescription>{m.desc}</CardDescription>
                     </CardHeader>
                   </Card>

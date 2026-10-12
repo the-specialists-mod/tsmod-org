@@ -43,11 +43,11 @@ export function ServersPage() {
     <>
       <PageHeader title="Servers" kicker="Find a fight">
         Community servers from the{' '}
-        <a href={SERVERS_TXT} className="text-foreground underline underline-offset-4">
+        <a href={SERVERS_TXT} className="link">
           launcher's server list
         </a>
         , plus every TS server Steam knows about. Copy an address and use <code className="text-foreground">connect &lt;address&gt;</code> in the console, or join from the{' '}
-        <a href={INSTALLER_REPO} className="text-foreground underline underline-offset-4">
+        <a href={INSTALLER_REPO} className="link">
           launcher
         </a>
         's server browser.
@@ -154,7 +154,7 @@ export function ServersPage() {
 
         <p className="text-xs text-muted-foreground">
           Run a server? Get it listed by opening a pull request that adds <code className="text-foreground">gs host:port</code> to{' '}
-          <a href={SERVERS_TXT} className="underline underline-offset-4 hover:text-foreground">
+          <a href={SERVERS_TXT} className="link">
             servers.txt
           </a>
           .

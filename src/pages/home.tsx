@@ -75,8 +75,8 @@ function HeroBackground() {
         />
       ))}
       <div className="scanlines absolute inset-0" />
-      <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-background/30" />
-      <div className="absolute inset-0 bg-gradient-to-r from-background/90 via-background/30 to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-black/20" />
+      <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/40 to-transparent" />
     </div>
   )
 }
@@ -85,15 +85,16 @@ export function HomePage() {
   const counts = useCounts()
   return (
     <>
-      <section className="relative isolate">
+      <section className="mx-auto max-w-6xl px-4 pt-8">
+        <div className="panel relative isolate overflow-hidden">
         <HeroBackground />
-        <div className="mx-auto flex min-h-[78vh] max-w-6xl flex-col justify-center px-4 py-24">
-          <Badge variant="outline" className="mb-6 w-fit border-primary/60 text-primary">
+        <div className="flex min-h-[440px] flex-col justify-center px-6 py-14 sm:px-10">
+          <Badge variant="outline" className="mb-5 w-fit border-link-hover/60 bg-black/50 text-link-hover">
             Free · Half-Life mod · Since 2002
           </Badge>
-          <img src="/img/logo_ts.png" alt="The Specialists" className="w-full max-w-xl drop-shadow-[0_8px_24px_rgba(0,0,0,0.8)]" />
-          <p className="mt-6 max-w-xl text-lg leading-relaxed text-foreground/90 sm:text-xl">
-            A multiplayer action movie. Slow motion, stunts, kung fu and akimbo gunfights in the Half-Life engine.
+          <h1 className="max-w-xl text-5xl leading-none text-white sm:text-6xl">A multiplayer action movie</h1>
+          <p className="mt-5 max-w-xl text-base leading-relaxed text-foreground/90 sm:text-lg">
+            Slow motion, stunts, kung fu and akimbo gunfights in the Half-Life engine.
           </p>
           <p className="mt-3 max-w-xl text-sm text-muted-foreground italic">"Welcome to a minute in the life of a Specialist."</p>
           <div className="mt-10 flex flex-wrap gap-3">
@@ -108,6 +109,7 @@ export function HomePage() {
               </Link>
             </Button>
           </div>
+        </div>
         </div>
       </section>
 
@@ -133,7 +135,7 @@ export function HomePage() {
         <div className="mt-8 grid gap-6 lg:grid-cols-2">
           <Card>
             <CardHeader>
-              <CardTitle className="font-display text-xl">TS Installer &amp; Launcher</CardTitle>
+              <CardTitle className="font-bold text-xl">TS Installer &amp; Launcher</CardTitle>
               <CardDescription>
                 One download for Windows and Linux. Installs TS into your Steam Half-Life, or sets up the free Xash3D FWGS engine with everything it needs, so you don't even
                 need to own Half-Life.
@@ -167,7 +169,7 @@ export function HomePage() {
           <Card>
             <img src="/img/rust-ts-dojo-fwgs.jpg" alt="The Rust port on Xash3D FWGS: ts_dojo, AK47 against a bot" className="aspect-video w-full object-cover" />
             <CardHeader>
-              <CardTitle className="flex items-center gap-2 font-display text-xl">
+              <CardTitle className="flex items-center gap-2 font-bold text-xl">
                 <CpuIcon className="text-primary" /> The Specialists, in Rust
               </CardTitle>
               <CardDescription>

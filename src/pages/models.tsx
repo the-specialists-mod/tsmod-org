@@ -50,11 +50,11 @@ export function ModelsPage() {
     <>
       <PageHeader title="Player models" kicker="Dress for the occasion">
         The seven models that ship with TS, and the {models.length.toLocaleString()} community models in the{' '}
-        <a href={MODEL_GOLDMINE_REPO} className="text-foreground underline underline-offset-4">
+        <a href={MODEL_GOLDMINE_REPO} className="link">
           model goldmine
         </a>
         . A model lives in <code className="text-foreground">ts/models/player/&lt;name&gt;/&lt;name&gt;.mdl</code>; the{' '}
-        <a href={INSTALLER_REPO} className="text-foreground underline underline-offset-4">
+        <a href={INSTALLER_REPO} className="link">
           launcher
         </a>{' '}
         can add and preview them in 3D.

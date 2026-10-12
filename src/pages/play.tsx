@@ -36,7 +36,7 @@ function Code({ children }: { children: string }) {
   return <pre className="overflow-x-auto border bg-black/50 p-4 text-xs leading-relaxed text-foreground/90">{children}</pre>
 }
 
-const A = (props: React.ComponentProps<'a'>) => <a className="text-foreground underline underline-offset-4 hover:text-primary" {...props} />
+const A = (props: React.ComponentProps<'a'>) => <a className="link" {...props} />
 
 export function PlayPage() {
   return (
@@ -98,7 +98,7 @@ export function PlayPage() {
             </ol>
             <Card size="sm" className="h-fit">
               <CardHeader>
-                <CardTitle className="font-display">ts-launcher</CardTitle>
+                <CardTitle className="font-bold">ts-launcher</CardTitle>
                 <CardDescription>Built with GPUI. Windows and Linux.</CardDescription>
               </CardHeader>
               <CardContent className="space-y-3 text-xs text-muted-foreground">
