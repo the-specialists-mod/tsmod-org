@@ -8,7 +8,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import {
   HALF_LIFE_STEAM,
-  INSTALLER_DOWNLOADS,
+  INSTALLER_RELEASES,
   INSTALLER_REPO,
   RUST_INSTALL_DOCS,
   RUST_RELEASES,
@@ -47,7 +47,7 @@ export function PlayPage() {
 
       <div className="mx-auto max-w-6xl px-4">
         <Tabs defaultValue="installer">
-          <TabsList className="mb-8 h-auto! flex-wrap">
+          <TabsList className="mb-8">
             <TabsTrigger value="installer">Installer (recommended)</TabsTrigger>
             <TabsTrigger value="steam">Manual: Steam Half-Life</TabsTrigger>
             <TabsTrigger value="rust">Rust port</TabsTrigger>
@@ -59,18 +59,20 @@ export function PlayPage() {
               <Step n={1} title="Download the launcher">
                 <div className="flex flex-wrap gap-2 pt-1">
                   <Button asChild>
-                    <a href={INSTALLER_DOWNLOADS.windows}>
+                    <a href={INSTALLER_RELEASES}>
                       <WindowsLogoIcon data-icon="inline-start" /> Windows x64
                     </a>
                   </Button>
                   <Button variant="secondary" asChild>
-                    <a href={INSTALLER_DOWNLOADS.linux}>
+                    <a href={INSTALLER_RELEASES}>
                       <LinuxLogoIcon data-icon="inline-start" /> Linux x64
                     </a>
                   </Button>
                 </div>
                 <p>
-                  On Linux, make it executable first: <code className="text-foreground">chmod +x ts-launcher-linux-x86_64.bin</code>
+                  Both open the latest release: take the <code className="text-foreground">.exe</code> for Windows or the{' '}
+                  <code className="text-foreground">.bin</code> for Linux. On Linux, make it executable first:{' '}
+                  <code className="text-foreground">chmod +x ts-launcher-*-linux-x86_64.bin</code>
                 </p>
               </Step>
               <Step n={2} title="Pick how you want to play">

@@ -4,13 +4,9 @@ export const ARCHIVE_ORG = 'https://github.com/The-Specialists-Archive'
 export const MOD_ORG = 'https://github.com/the-specialists-mod'
 
 export const INSTALLER_REPO = `${MOD_ORG}/tsmod-installer`
+// Launcher downloads go to the latest release page: its file names carry the version
+// (ts-launcher-v0.2.1-windows-x86_64.exe), so there's no stable direct link.
 export const INSTALLER_RELEASES = `${INSTALLER_REPO}/releases/latest`
-// GitHub redirects these to the files on whichever release is marked "latest". The repo's
-// `ts-3.0` release (the game installer) must stay un-marked, or these links would break.
-export const INSTALLER_DOWNLOADS = {
-  windows: `${INSTALLER_REPO}/releases/latest/download/ts-launcher-windows-x86_64.exe`,
-  linux: `${INSTALLER_REPO}/releases/latest/download/ts-launcher-linux-x86_64.bin`,
-}
 export const SERVERS_TXT = `${INSTALLER_REPO}/blob/main/servers.txt`
 
 export const RUST_REPO = `${MOD_ORG}/the-specialistsmod-rs`

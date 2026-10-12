@@ -205,7 +205,7 @@ export function ManualPage() {
 
       <div className="mx-auto max-w-6xl px-4">
         <Tabs value={tab} onValueChange={setTab}>
-          <TabsList className="mb-8 h-auto! flex-wrap">
+          <TabsList className="mb-8">
             <TabsTrigger value="basics">Basics</TabsTrigger>
             <TabsTrigger value="weapons">Weapons</TabsTrigger>
             <TabsTrigger value="loadout">Loadout builder</TabsTrigger>

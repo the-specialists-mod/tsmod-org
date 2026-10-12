@@ -16,7 +16,7 @@ import {
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
-import { INSTALLER_DOWNLOADS, INSTALLER_RELEASES, OFFICIAL_SITE_WAYBACK, RUST_RELEASES, RUST_REPO } from '@/content/links'
+import { INSTALLER_RELEASES, INSTALLER_REPO, OFFICIAL_SITE_WAYBACK, RUST_RELEASES, RUST_REPO } from '@/content/links'
 import { officialMaps } from '@/content/official-maps'
 import { weapons } from '@/content/weapons'
 
@@ -164,17 +164,17 @@ export function HomePage() {
             </CardContent>
             <CardFooter className="flex flex-wrap gap-2">
               <Button asChild>
-                <a href={INSTALLER_DOWNLOADS.windows}>
+                <a href={INSTALLER_RELEASES}>
                   <WindowsLogoIcon data-icon="inline-start" /> Windows
                 </a>
               </Button>
               <Button variant="secondary" asChild>
-                <a href={INSTALLER_DOWNLOADS.linux}>
+                <a href={INSTALLER_RELEASES}>
                   <LinuxLogoIcon data-icon="inline-start" /> Linux
                 </a>
               </Button>
               <Button variant="link" asChild>
-                <a href={INSTALLER_RELEASES}>Latest release on GitHub</a>
+                <a href={INSTALLER_REPO}>Source on GitHub</a>
               </Button>
             </CardFooter>
           </Card>

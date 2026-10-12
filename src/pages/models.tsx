@@ -63,7 +63,7 @@ export function ModelsPage() {
       <div className="mx-auto max-w-6xl px-4">
         <Tabs value={tab} onValueChange={(v) => update('tab', v === 'archive' ? '' : v)}>
           <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-            <TabsList className="h-auto! flex-wrap">
+            <TabsList>
               <TabsTrigger value="archive">Goldmine ({archive.length.toLocaleString()})</TabsTrigger>
               <TabsTrigger value="stock">Stock ({stock.length})</TabsTrigger>
             </TabsList>

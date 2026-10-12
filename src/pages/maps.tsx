@@ -67,7 +67,7 @@ export function MapsPage() {
       <div className="mx-auto max-w-6xl px-4">
         <Tabs value={tab} onValueChange={(v) => update('tab', v === 'official' ? '' : v)}>
           <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-            <TabsList className="h-auto! flex-wrap">
+            <TabsList>
               <TabsTrigger value="official">Official ({official.length})</TabsTrigger>
               <TabsTrigger value="community">Community ({custom.length})</TabsTrigger>
               <TabsTrigger value="archive">Archive ({archive.length})</TabsTrigger>
