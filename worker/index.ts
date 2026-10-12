@@ -12,7 +12,7 @@ export interface Env {
   STEAM_API_KEY?: string
 }
 
-const SERVERS_TXT_URL = 'https://raw.githubusercontent.com/the-specialists-mod/tsmod-installer/main/servers.txt'
+const SERVERS_TXT_URL = 'https://raw.githubusercontent.com/the-specialists-mod/tsmod-launcher/main/servers.txt'
 const CACHE_SECONDS = 60
 
 /** Parses servers.txt: `gs host:port` / `ip host:port`, with the preceding `#` comment as a label. */

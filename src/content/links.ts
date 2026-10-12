@@ -3,7 +3,7 @@
 export const ARCHIVE_ORG = 'https://github.com/The-Specialists-Archive'
 export const MOD_ORG = 'https://github.com/the-specialists-mod'
 
-export const INSTALLER_REPO = `${MOD_ORG}/tsmod-installer`
+export const INSTALLER_REPO = `${MOD_ORG}/tsmod-launcher`
 // Launcher downloads go to the latest release page: its file names carry the version
 // (ts-launcher-v0.2.1-windows-x86_64.exe), so there's no stable direct link.
 export const INSTALLER_RELEASES = `${INSTALLER_REPO}/releases/latest`

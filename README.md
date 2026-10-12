@@ -5,7 +5,7 @@ Tailwind CSS and shadcn/ui, and served by a Cloudflare Worker.
 
 Content draws on the original [specialistsmod.net](https://github.com/The-Specialists-Archive/specialistsmod.net)
 (2007), the previous [tsmod.org](https://github.com/The-Specialists-Archive/tsmod.org), the
-[installer](https://github.com/the-specialists-mod/tsmod-installer) and the
+[launcher](https://github.com/the-specialists-mod/tsmod-launcher) and the
 [Rust port](https://github.com/the-specialists-mod/the-specialistsmod-rs).
 
 ## Develop

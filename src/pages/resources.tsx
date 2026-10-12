@@ -8,7 +8,7 @@ import repos from '@/data/archive-repos.json'
 type Resource = { name: string; href: string; desc: string; badges?: string[]; updated?: string }
 
 const activeProjects: Resource[] = [
-  { name: 'tsmod-installer', href: INSTALLER_REPO, desc: 'Cross-platform installer and launcher: server browser, model picker, controls, settings, hosting.' },
+  { name: 'tsmod-launcher', href: INSTALLER_REPO, desc: 'Cross-platform launcher and installer: server browser, model picker, controls, settings, hosting.' },
   { name: 'the-specialistsmod-rs', href: RUST_REPO, desc: 'Wire-compatible Rust port of the TS 3.0 client and server libraries.' },
   { name: 'the-specialists-decomp', href: DECOMP_REPO, desc: 'Ghidra decompilation and documentation of the TS 3.0 binaries, the reference for the port.' },
   { name: 'tsmod.net', href: TSMOD_NET, desc: 'Community hub run by Retro LAN: a mod download, live player stats for its srv.tsmod.net server, media, and the FAQ and manual.' },
