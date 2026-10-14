@@ -85,3 +85,93 @@ export const meleeRules = [
   { label: 'Ground kicks', value: 'Slowed', note: 'After a ground kick you move at half speed for ¾ of its recovery.' },
   { label: 'Late hits', value: 'Window', note: 'A miss stays live for a moment (0.1–0.35 s) and can still land, at half damage for each extra target.' },
 ]
+
+// ---- TS 2.1 -------------------------------------------------------------------------------
+// TS 2.1's close combat, from the Rust port's 2.1 mode: CCombatAttack, CCombatBlock, KatanaFire,
+// KnifeFire and the stock hit (the-specialistsmod-rs crates/ts21/src/shared/melee.rs,
+// crates/ts21/server/src/melee.rs, docs/implementation/ts21.md "Damage"). Damage is the move's
+// base: a hit deals base × 0.9 × the melee bar (0–100%), before the Kung Fu power-up.
+// Recovery is at normal speed; slow motion stretches it.
+
+export const punches21: Move[] = [
+  { name: 'Jab', input: 'Fire', when: 'On the ground', damage: '10', recovery: '0.15', reach: '38', note: 'After five in a row, the sixth is a heavy punch.' },
+  { name: 'Heavy punch', input: 'Fire after 5 jabs', when: 'On the ground', damage: '10–20, faster hits harder', recovery: '0.2', reach: '38' },
+  { name: 'Air punch', input: 'Fire', when: 'In the air', damage: '10–30, faster hits harder', recovery: '0.3', reach: '38' },
+  { name: 'Stunt strike', input: 'Fire', when: 'Mid-dive', damage: '10–30, faster hits harder', recovery: '0.3', reach: '38' },
+]
+
+export const kicks21: Move[] = [
+  { name: 'Ground kick', input: 'Mouse2', when: 'On the ground, or slower than 200', damage: '10–20, faster hits harder', recovery: '0.5', reach: '48', note: 'Cycles through four kicks.' },
+  { name: 'Sweep', input: 'Duck + Mouse2', when: 'On the ground', damage: '30', recovery: '1.0', reach: '48', note: 'Leaves you crouched.' },
+  {
+    name: 'Back kick',
+    input: 'Mouse2 while moving backwards',
+    when: 'Anywhere, faster than 100',
+    damage: '10–90, faster hits harder',
+    recovery: '0.9',
+    reach: '56 behind',
+    note: 'The strongest kick: run backwards into someone.',
+  },
+  {
+    name: 'Flying kick',
+    input: 'Duck + Mouse2',
+    when: 'In the air, moving forward faster than 270',
+    damage: '10–45, faster hits harder',
+    recovery: '0.9',
+    reach: '48',
+    note: 'Leaves you crouched.',
+  },
+  { name: 'Air kick', input: 'Mouse2', when: 'In the air, faster than 200', damage: '10–30, faster hits harder', recovery: '0.7', reach: '48', note: 'Cycles through three kicks.' },
+  { name: 'Flip kick', input: 'Mouse2', when: 'Mid-flip', damage: '10–30, faster hits harder', recovery: '1.0', reach: '48' },
+  {
+    name: 'Jump kick',
+    input: 'Hold Jump next to them',
+    when: 'With a gun or blade out (not kung fu), not ducking',
+    damage: '10–20, faster hits harder',
+    recovery: '0.7',
+    reach: '48',
+    note: 'Your kick with a weapon in hand. Uses no bar; doubled by the Kung Fu power-up.',
+  },
+  {
+    name: 'Backflip kick',
+    input: 'Double-tap Jump',
+    when: 'Standing or moving backwards, light enough for a high flip',
+    damage: '15',
+    recovery: '—',
+    reach: 'Touch',
+    note: 'Lands on anyone you touch in the next 0.3 s. Uses no bar; 30 with the Kung Fu power-up.',
+  },
+]
+
+export const blades21: Move[] = [
+  { name: 'Knife slash', input: 'Fire', when: 'Combat Knife / Seal Knife, not mid-stunt', damage: '35 / 15', recovery: '0.28 / 0.21', reach: '38' },
+  {
+    name: 'Knife throw',
+    input: 'Mouse2',
+    when: 'Combat Knife / Seal Knife',
+    damage: '80 / 50',
+    recovery: '0.28 / 0.21',
+    reach: 'Thrown',
+    note: 'Flies at 1,300 units/s. The combat knife’s 80 falls off past 512 units, to 50 at 1,088.',
+  },
+  { name: 'Katana swing', input: 'Fire', when: 'Standing or slower than 100 / faster, also in the air', damage: '59 / 29', recovery: '0.35', reach: '48', note: 'Alternates left and right swings.' },
+  { name: 'Katana low swing', input: 'Duck + Fire', when: 'On the ground', damage: '76', recovery: '0.7', reach: '48', note: 'Leaves you crouched.' },
+  { name: 'Katana back swing', input: 'Fire while moving backwards', when: 'Anywhere, faster than 100', damage: '85', recovery: '0.7', reach: '54 behind' },
+  { name: 'Gun-butt strike', input: 'V', when: 'M4A1 and Sawed-off only', damage: '20', recovery: '0.725', reach: '38', note: 'No disarm or knockback.' },
+]
+
+export const blockRules21 = [
+  { label: 'Block', value: 'R', note: 'With kung fu only: R does nothing with a blade. Opens a 0.3 s block window.' },
+  { label: 'Cost', value: 'None', note: 'Blocking spends no bar and works on an empty one.' },
+  { label: 'Blocked hit', value: 'Bar %', note: 'The part your bar is missing still gets through (at 60 bar, 40% of the hit), and drains your bar by that much.' },
+  { label: 'Blade parry', value: 'Swing', note: 'A knife swing briefly blocks knives; a katana swing blocks knives and katanas.' },
+]
+
+export const meleeRules21 = [
+  { label: 'Melee bar', value: '×0–0.9', note: 'A hit deals 0.9 × its base × your bar: an empty bar deals nothing. Each attack costs 0.9 × its base. Refills at 15 per second.' },
+  { label: 'Kung Fu power-up', value: '×2', note: 'Doubles kung fu and jump-kick damage.' },
+  { label: 'Disarm', value: '> 15 dmg', note: 'A kung fu hit over 15 knocks the gun out of their hands at once. The One can’t be disarmed.' },
+  { label: 'Knockback', value: '> 30 dmg', note: 'Hard hits throw the target back and up.' },
+  { label: 'Recovery', value: 'Held', note: 'After an attack on the ground you’re held for 0.9 × its recovery, moving at a tenth of your input.' },
+  { label: 'Late hits', value: '0.3 s', note: 'A miss stays live for 0.3 s and can still land.' },
+]
