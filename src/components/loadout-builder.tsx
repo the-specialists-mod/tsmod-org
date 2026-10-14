@@ -2,27 +2,9 @@ import { useMemo, useState } from 'react'
 import { useSearchParams } from 'react-router'
 import { CheckIcon, LinkIcon, MinusIcon, PlusIcon, ShieldIcon, TrashIcon, XIcon } from '@phosphor-icons/react'
 import { Button } from '@/components/ui/button'
-import { AttachmentIcon, attachmentLabels, FireModeIcon, fireModeLabels, IconChip } from '@/components/weapon-icons'
-import { weaponById, type Attachment, type FireMode, type Weapon } from '@/content/weapons'
-import {
-  buyable,
-  decodeLoadout,
-  encodeLoadout,
-  entryCost,
-  entrySlots,
-  KEVLAR_SLOTS,
-  MONEY,
-  presets,
-  slotsOf,
-  speedBySlots,
-  stuntLevel,
-  thrownDamage,
-  totalCost,
-  TOTAL_SLOTS,
-  usedSlots,
-  type Entry,
-  type Loadout,
-} from '@/lib/loadout'
+import { AttachmentIcon, attachmentLabelsFor, FireModeIcon, fireModeLabels, IconChip } from '@/components/weapon-icons'
+import { type Attachment, type FireMode, type Weapon } from '@/content/weapons'
+import { encodeLoadout, type Entry, type Loadout, type Ruleset } from '@/lib/loadout'
 import { cn } from '@/lib/utils'
 
 const kinds: Weapon['kind'][] = ['Pistol', 'Akimbo', 'SMG', 'Rifle', 'Shotgun', 'Sniper', 'Blade']
@@ -51,11 +33,11 @@ function Meter({ value, max, className }: { value: number; max: number; classNam
 }
 
 /** Whole loadout: what it can do, at a glance. */
-function Capabilities({ loadout, entries }: { loadout: Loadout; entries: { e: Entry; w: Weapon }[] }) {
-  const used = usedSlots(loadout)
-  const free = TOTAL_SLOTS - used
-  const speed = speedBySlots(free)
-  const stunts = stuntLevel(used)
+function Capabilities({ rules: r, loadout, entries }: { rules: Ruleset; loadout: Loadout; entries: { e: Entry; w: Weapon }[] }) {
+  const used = r.usedSlots(loadout)
+  const free = r.totalSlots - used
+  const speed = r.speedBySlots(free)
+  const stunts = r.stuntLevel(used, loadout.kevlar)
   const modes = [...new Set(entries.flatMap(({ w }) => w.modes))] as FireMode[]
   const stockGuns = entries.filter(({ w }) => w.stock > 0).map(({ w }) => w)
   const blades = entries.filter(({ w }) => w.kind === 'Blade').map(({ w }) => w)
@@ -64,16 +46,16 @@ function Capabilities({ loadout, entries }: { loadout: Loadout; entries: { e: En
   return (
     <div className="panel p-4 lg:sticky lg:top-14">
       <h3 className="text-xl">Capabilities</h3>
-      <Stat label="Slots" value={`${used} / ${TOTAL_SLOTS}`} note={`${free} free`}>
+      <Stat label="Slots" value={`${used} / ${r.totalSlots}`} note={`${free} free`}>
         <div className="mt-1.5 flex h-3 border border-black bg-black/50" aria-hidden>
           {entries.map(({ e }, i) => (
-            <div key={e.id} style={{ width: `${(entrySlots(e) / TOTAL_SLOTS) * 100}%`, background: SEGMENT[i % SEGMENT.length] }} className="border-r border-black/70" />
+            <div key={e.id} style={{ width: `${(r.entrySlots(e) / r.totalSlots) * 100}%`, background: SEGMENT[i % SEGMENT.length] }} className="border-r border-black/70" />
           ))}
-          {loadout.kevlar && <div style={{ width: `${(KEVLAR_SLOTS / TOTAL_SLOTS) * 100}%` }} className="border-r border-black/70 bg-[#777]" />}
+          {loadout.kevlar && r.kevlarSlots > 0 && <div style={{ width: `${(r.kevlarSlots / r.totalSlots) * 100}%` }} className="border-r border-black/70 bg-[#777]" />}
         </div>
       </Stat>
-      <Stat label="Run speed" value={speed} note={speed === 330 ? 'Top speed: you carry nothing.' : 'From 210 fully loaded to 330 empty-handed.'}>
-        <Meter value={speed - 210} max={120} />
+      <Stat label="Run speed" value={speed} note={speed === r.speedMax ? r.text.topSpeed : r.text.speed}>
+        <Meter value={speed - r.speedMin} max={r.speedMax - r.speedMin} />
       </Stat>
       <Stat label="Stunts" value={stunts.name} note={stunts.desc}>
         <div className="mt-1.5 grid grid-cols-3 gap-0.5">
@@ -99,13 +81,13 @@ function Capabilities({ loadout, entries }: { loadout: Loadout; entries: { e: En
         value={1 + blades.length + (stockGuns.length ? 1 : 0)}
         note={[
           'Kung fu (always)',
-          ...blades.map((b) => `${b.name} slash & throw`),
+          ...blades.map((b) => `${b.name} ${r.thrownDamage[b.id] ? 'slash & throw' : 'slash'}`),
           stockGuns.length ? `gun-butt strike (${stockGuns.map((g) => g.name).join(', ')})` : '',
         ]
           .filter(Boolean)
           .join(' · ')}
       />
-      <Stat label="Cost" value={`$${totalCost(loadout).toLocaleString()}`} note={`Of $${MONEY.toLocaleString()}. Money is never short in 3.0.`} />
+      <Stat label="Cost" value={`$${r.totalCost(loadout).toLocaleString()}`} note={r.text.cost} />
       <Button
         variant="outline"
         size="sm"
@@ -124,6 +106,7 @@ function Capabilities({ loadout, entries }: { loadout: Loadout; entries: { e: En
 }
 
 function EntryCard({
+  rules: r,
   entry,
   weapon,
   color,
@@ -131,6 +114,7 @@ function EntryCard({
   onChange,
   onRemove,
 }: {
+  rules: Ruleset
   entry: Entry
   weapon: Weapon
   color: string
@@ -139,12 +123,13 @@ function EntryCard({
   onRemove: () => void
 }) {
   // The single gun this entry is (or pairs up from), and its pair if it has one.
-  const single = weapon.singleId != null ? weaponById.get(weapon.singleId)! : weapon
-  const pair = single.pairId != null ? weaponById.get(single.pairId) : undefined
+  const single = weapon.singleId != null ? r.weaponById.get(weapon.singleId)! : weapon
+  const pair = single.pairId != null ? r.weaponById.get(single.pairId) : undefined
   const isPair = weapon.singleId != null
   const silenced = entry.attachments.includes('silencer') || weapon.builtIn.includes('silencer')
-  const damage = Math.round(weapon.damage * (silenced ? 0.775 : 1) * 10) / 10
-  const canPair = pair && !isPair && free >= slotsOf(pair) - slotsOf(weapon)
+  const damage = Math.round(weapon.damage * (silenced ? r.silencerDamage : 1) * 10) / 10
+  const canPair = pair && !isPair && free >= r.slotsOf(pair) - r.slotsOf(weapon)
+  const attachmentLabels = attachmentLabelsFor(r.version)
 
   return (
     <li className="panel flex flex-col gap-3 p-4" style={{ boxShadow: `inset 3px 0 0 ${color}, inset 0 0 0 1px #474747` }}>
@@ -156,7 +141,7 @@ function EntryCard({
           </p>
           <p className="text-[11px] text-muted-foreground">
             {weapon.kind}
-            {isPair && ` · 2× ${single.name}`} · {entrySlots(entry)} slots · ${entryCost(entry).toLocaleString()}
+            {isPair && ` · 2× ${single.name}`} · {r.entrySlots(entry)} slots · ${r.entryCost(entry).toLocaleString()}
           </p>
         </div>
         <Button variant="ghost" size="icon-sm" onClick={onRemove} aria-label={`Remove ${weapon.name}`}>
@@ -175,11 +160,11 @@ function EntryCard({
         </div>
         <div>
           <dt className="text-muted-foreground">{weapon.kind === 'Blade' ? 'Swing every' : 'Max rate'}</dt>
-          <dd className="text-foreground">{weapon.kind === 'Blade' ? `${weapon.rate}s` : `${Math.round(60 / weapon.rate)}/min`}</dd>
+          <dd className="text-foreground">{weapon.kind === 'Blade' ? `${r.swingTime(weapon)}s` : `${Math.round(60 / weapon.rate)}/min`}</dd>
         </div>
         <div>
           <dt className="text-muted-foreground">{weapon.kind === 'Blade' ? 'Thrown' : 'Clip'}</dt>
-          <dd className="text-foreground">{weapon.kind === 'Blade' ? (thrownDamage[weapon.id] ?? '—') : (weapon.clip ?? '—')}</dd>
+          <dd className="text-foreground">{weapon.kind === 'Blade' ? (r.thrownDamage[weapon.id] ?? '—') : (weapon.clip ?? '—')}</dd>
         </div>
       </dl>
 
@@ -234,7 +219,7 @@ function EntryCard({
               isPair ? 'bg-primary text-primary-foreground' : 'bg-black/30 text-muted-foreground hover:text-foreground',
             )}
           >
-            {isPair ? <CheckIcon /> : <PlusIcon />} Akimbo pair{!isPair && ` (+${slotsOf(single)} slots)`}
+            {isPair ? <CheckIcon /> : <PlusIcon />} Akimbo pair{!isPair && ` (+${r.slotsOf(single)} slots)`}
           </button>
         )}
         {weapon.stack && (
@@ -253,9 +238,9 @@ function EntryCard({
   )
 }
 
-export function LoadoutBuilder() {
+export function LoadoutBuilder({ rules: r }: { rules: Ruleset }) {
   const [params, setParams] = useSearchParams()
-  const loadout = useMemo(() => decodeLoadout(params.get('l')), [params])
+  const loadout = useMemo(() => r.decodeLoadout(params.get('l')), [r, params])
   const [kind, setKind] = useState<Weapon['kind']>('Pistol')
 
   const setLoadout = (l: Loadout) =>
@@ -269,13 +254,13 @@ export function LoadoutBuilder() {
       { replace: true, preventScrollReset: true },
     )
 
-  const entries = loadout.entries.map((e) => ({ e, w: weaponById.get(e.id)! }))
-  const used = usedSlots(loadout)
-  const free = TOTAL_SLOTS - used
+  const entries = loadout.entries.map((e) => ({ e, w: r.weaponById.get(e.id)! }))
+  const used = r.usedSlots(loadout)
+  const free = r.totalSlots - used
   const owned = new Set(entries.flatMap(({ w }) => [w.id, w.singleId, w.pairId]))
   const update = (i: number, e: Entry) => {
     const next = { ...loadout, entries: loadout.entries.map((x, j) => (j === i ? e : x)) }
-    if (usedSlots(next) <= TOTAL_SLOTS) setLoadout(next)
+    if (r.usedSlots(next) <= r.totalSlots) setLoadout(next)
   }
 
   return (
@@ -284,12 +269,12 @@ export function LoadoutBuilder() {
         <div>
           <p className="mb-2 text-xs font-bold text-foreground">Start from a preset</p>
           <div className="flex flex-wrap gap-1.5">
-            {presets.map((p) => (
+            {r.presets.map((p) => (
               <button
                 key={p.name}
                 type="button"
                 title={p.desc}
-                onClick={() => setLoadout(decodeLoadout(p.loadout))}
+                onClick={() => setLoadout(r.decodeLoadout(p.loadout))}
                 className={cn(
                   'border border-black px-2.5 py-1 text-xs transition-colors',
                   encodeLoadout(loadout) === p.loadout ? 'bg-primary text-primary-foreground' : 'bg-black/30 text-muted-foreground hover:text-foreground',
@@ -325,11 +310,11 @@ export function LoadoutBuilder() {
             ))}
           </div>
           <ul className="panel divide-y divide-black/60">
-            {buyable
+            {r.buyable
               .filter((w) => w.kind === kind)
               .map((w) => {
                 const has = owned.has(w.id)
-                const fits = free >= slotsOf(w)
+                const fits = free >= r.slotsOf(w)
                 return (
                   <li key={w.id} className="flex items-center gap-3 px-3 py-2 text-xs">
                     <span className="min-w-0 flex-1 truncate text-foreground">{w.name}</span>
@@ -338,13 +323,13 @@ export function LoadoutBuilder() {
                         <FireModeIcon key={m} mode={m} className="size-4 text-muted-foreground" />
                       ))}
                     </span>
-                    <span className="w-14 text-right text-muted-foreground">{slotsOf(w)} slots</span>
+                    <span className="w-14 text-right text-muted-foreground">{r.slotsOf(w)} slots</span>
                     <Button
                       size="xs"
                       variant={has ? 'secondary' : 'default'}
                       disabled={has || !fits}
                       onClick={() => setLoadout({ ...loadout, entries: [...loadout.entries, { id: w.id, attachments: [], count: 1 }] })}
-                      title={has ? 'Already in your loadout' : !fits ? `Needs ${slotsOf(w)} free slots` : undefined}
+                      title={has ? 'Already in your loadout' : !fits ? `Needs ${r.slotsOf(w)} free slots` : undefined}
                     >
                       {has ? <CheckIcon data-icon="inline-start" /> : <PlusIcon data-icon="inline-start" />}
                       {has ? 'Added' : 'Add'}
@@ -358,12 +343,12 @@ export function LoadoutBuilder() {
               type="checkbox"
               className="accent-primary"
               checked={loadout.kevlar}
-              disabled={!loadout.kevlar && free < KEVLAR_SLOTS}
+              disabled={!loadout.kevlar && free < r.kevlarSlots}
               onChange={(e) => setLoadout({ ...loadout, kevlar: e.target.checked })}
             />
-            <ShieldIcon className="text-foreground" /> Kevlar vest (10 slots, $1,900)
+            <ShieldIcon className="text-foreground" /> {r.text.kevlar}
           </label>
-          <p className="mt-2 text-[11px] text-muted-foreground">Grenades and stealth shoes are in the buy menu but the 3.0 server refuses them.</p>
+          <p className="mt-2 text-[11px] text-muted-foreground">{r.text.buyNote}</p>
         </div>
 
         <div>
@@ -375,6 +360,7 @@ export function LoadoutBuilder() {
               {entries.map(({ e, w }, i) => (
                 <EntryCard
                   key={e.id}
+                  rules={r}
                   entry={e}
                   weapon={w}
                   color={SEGMENT[i % SEGMENT.length]}
@@ -388,7 +374,7 @@ export function LoadoutBuilder() {
         </div>
       </div>
 
-      <Capabilities loadout={loadout} entries={entries} />
+      <Capabilities rules={r} loadout={loadout} entries={entries} />
     </div>
   )
 }

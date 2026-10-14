@@ -3,6 +3,7 @@
 import { cn } from '@/lib/utils'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 import type { Attachment, FireMode, Weapon } from '@/content/weapons'
+import type { Version } from '@/lib/version'
 
 type IconProps = { className?: string }
 
@@ -114,6 +115,16 @@ export const attachmentLabels: Record<Attachment, { name: string; desc: string }
   scope: { name: 'Scope', desc: 'Two zoom levels on the secondary attack (Mouse2).' },
 }
 
+/** TS 2.1's: its silencer costs less damage but widens the spread (the Rust port's combat21.toml). */
+export const attachmentLabels21: Record<Attachment, { name: string; desc: string }> = {
+  ...attachmentLabels,
+  silencer: { name: 'Silencer', desc: 'Quieter shots: damage and kick ×0.8, spread ×1.2.' },
+}
+
+export function attachmentLabelsFor(v: Version) {
+  return v === '21' ? attachmentLabels21 : attachmentLabels
+}
+
 export function FireModeIcon({ mode, className }: { mode: FireMode } & IconProps) {
   const Icon = fireModeIcons[mode]
   return <Icon className={className} />
@@ -160,16 +171,16 @@ export function WeaponIcons({ w }: { w: Weapon }) {
 }
 
 /** Icon chips for a weapon's attachments; built-in ones are yellow, unselected ones dimmed. */
-export function AttachmentIcons({ w, selected }: { w: Weapon; selected?: Attachment[] }) {
+export function AttachmentIcons({ w, selected, labels = attachmentLabels }: { w: Weapon; selected?: Attachment[]; labels?: typeof attachmentLabels }) {
   return (
     <span className="inline-flex flex-wrap gap-1">
       {w.builtIn.map((a) => (
-        <IconChip key={a} label={`${attachmentLabels[a].name} (built in)`} desc={attachmentLabels[a].desc}>
+        <IconChip key={a} label={`${labels[a].name} (built in)`} desc={labels[a].desc}>
           <AttachmentIcon attachment={a} className="size-4 text-link-hover" />
         </IconChip>
       ))}
       {w.attachments.map((a) => (
-        <IconChip key={a} label={attachmentLabels[a].name} desc={attachmentLabels[a].desc} muted={selected ? !selected.includes(a) : true}>
+        <IconChip key={a} label={labels[a].name} desc={labels[a].desc} muted={selected ? !selected.includes(a) : true}>
           <AttachmentIcon attachment={a} className="size-4" />
         </IconChip>
       ))}
