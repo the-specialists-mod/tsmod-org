@@ -161,7 +161,7 @@ export const serverCvars = [
   { cvar: 'spectacularness 1', desc: '0–100: how often stylish kills and explosions trigger a slow-motion moment (0 is off)' },
   { cvar: 'mp_friendlyfire 1', desc: 'Team damage; banfortk kicks or bans team killers' },
   { cvar: 'ts_bot_quota N', desc: 'Rust port only: keep N bots on the server' },
-  { cvar: 'ts_gameplay 21', desc: "Rust port only: play by TS 2.1's rules from the next map change (see the 2.1 manual). 30 is 3.0, the default" },
+  { cvar: 'ts_gameplay 21', desc: "Rust port only: play by TS 2.1's rules; changing it reloads the map (see the 2.1 manual). 30 is 3.0, the default" },
 ]
 
 // ---- TS 2.1 -------------------------------------------------------------------------------
@@ -173,7 +173,7 @@ export const faq21: Faq[] = [
   whatDoINeed,
   {
     q: 'What is TS 2.1 mode?',
-    a: "TS 2.1 (April 2004) is the release before 3.0. The Rust port can play by its rules on the same maps and content: a server turns it on with ts_gameplay 21, from the next map change. Play it with the port's client; a 2.1 server turns the original 3.0 client away.",
+    a: "TS 2.1 (April 2004) is the release before 3.0. The Rust port can play by its rules on the same maps and content: a server turns it on with ts_gameplay 21, which reloads the map under 2.1's rules. Play it with the port's client; a 2.1 server turns the original 3.0 client away.",
   },
   {
     q: 'How do I pick my weapons?',
@@ -307,7 +307,7 @@ export const sprees21 = [
 ]
 
 export const serverCvars21 = [
-  { cvar: 'ts_gameplay 21', desc: "Rust port only: play by TS 2.1's rules, from the next map change; 30 goes back to 3.0" },
+  { cvar: 'ts_gameplay 21', desc: "Rust port only: play by TS 2.1's rules; changing it reloads the map. 30 goes back to 3.0" },
   { cvar: 'mp_teamplay 1', desc: 'Team deathmatch on maps without a team prefix (teams from mp_teamlist, default hitman;gordon)' },
   { cvar: 'lastmanstanding 1', desc: 'Last Man Standing in deathmatch, applied at once' },
   { cvar: 'mp_theonemode 1', desc: 'The One (models from mp_theone / mp_theothers)' },
