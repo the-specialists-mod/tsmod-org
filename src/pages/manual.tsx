@@ -136,11 +136,12 @@ function Ts21Note() {
             Rust port
           </a>{' '}
           plays TS 2.1's rules on a TS 3.0 server: set <code className="text-foreground">ts_gameplay 21</code> in the console or server.cfg, and{' '}
-          <code className="text-foreground">ts_gameplay 30</code> to go back. Switching resets the map to a fresh state without changing it: scores, cash, loadouts,
-          rounds and the map's entities all start again under the new rules.
+          <code className="text-foreground">ts_gameplay 30</code> to go back. The setting takes effect at the next map change, so the map starts fresh under the
+          new rules.
         </p>
         <p>
-          Players need the port's client, which the launcher installs. The original TS 3.0 client can join, but it mispredicts movement and weapons in 2.1 mode.
+          Players need the port's client, which the launcher installs. A server in 2.1 mode turns the original TS 3.0 client away with "Invalid Version: Running
+          2.1 mode. Upgrade to the rust port at tsmod.org". The port's weapon select menu shows which rules the server runs and the game's version.
         </p>
       </div>
     </div>

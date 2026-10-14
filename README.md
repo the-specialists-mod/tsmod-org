@@ -68,3 +68,8 @@ scripts/          data generators
   are hand-written from the same port's source.
 
 Anyone can contribute with a pull request.
+
+## License
+
+The site's code is [MIT](LICENSE). The content it hosts or shows (community maps, models, screenshots, logos and archived
+material) belongs to its authors; The Specialists and Half-Life belong to their respective owners.
